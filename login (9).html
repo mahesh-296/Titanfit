@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="description" content="TitanFit – Sign in or create your account"/>
+<meta name="theme-color" content="#E8192C"/>
+<title>TitanFit – Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#FAFAFA;--fg:#111111;--fg-muted:#6B7280;--card:#FFFFFF;
+  --primary:#E8192C;--primary-dark:#C0141F;--muted:#F4F6F8;--muted-fg:#6B7280;
+  --border:#E5E7EB;--input:#F4F6F8;--radius:16px;
+  --shadow-elev:0 8px 32px rgba(0,0,0,0.12);
+  --font-display:'Bebas Neue',sans-serif;--font-sans:'DM Sans',sans-serif;
+}
+.dark{
+  --bg:#1A1A1A;--fg:#FAFAFA;--fg-muted:#9CA3AF;--card:#232323;
+  --muted:#2A2A2A;--muted-fg:#9CA3AF;--border:#2E2E2E;--input:#2A2A2A;
+  --shadow-elev:0 8px 32px rgba(0,0,0,0.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem;transition:background .3s,color .3s;position:relative;overflow:hidden}
+body::before{content:'';position:absolute;top:-120px;right:-120px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(232,25,44,.07) 0%,transparent 70%);pointer-events:none}
+body::after{content:'';position:absolute;bottom:-100px;left:-100px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(192,192,192,.05) 0%,transparent 70%);pointer-events:none}
+
+/* THEME TOGGLE */
+.theme-btn{position:fixed;top:1.25rem;right:1.25rem;width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--fg-muted);transition:all .2s;z-index:10}
+.theme-btn:hover{background:var(--muted)}
+.theme-btn svg{width:20px;height:20px}
+
+/* CARD */
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow-elev);padding:2.5rem 2rem;width:100%;max-width:420px;position:relative;z-index:1;animation:fadeUp .45s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* LOGO */
+.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.75rem;text-decoration:none}
+.logo-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--primary),#C0141F);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-display);font-size:1.3rem}
+.logo-name{font-family:var(--font-display);font-size:2rem;letter-spacing:.08em;color:var(--fg)}
+
+/* HEADING */
+.auth-h1{font-size:1.5rem;font-weight:700;color:var(--fg);text-align:center;margin-bottom:4px}
+.auth-sub{font-size:.9rem;color:var(--fg-muted);text-align:center;margin-bottom:1.75rem}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--muted);border-radius:12px;padding:4px;margin-bottom:1.75rem}
+.tab{flex:1;padding:9px;border:none;background:transparent;border-radius:10px;font-size:.875rem;font-weight:600;color:var(--fg-muted);cursor:pointer;transition:all .2s;font-family:var(--font-sans)}
+.tab.active{background:var(--card);color:var(--fg);box-shadow:0 1px 8px rgba(0,0,0,.08)}
+
+/* FORM */
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.875rem;font-weight:500;color:var(--fg);margin-bottom:6px}
+.form-input{width:100%;padding:12px 16px;background:var(--input);border:1.5px solid var(--border);border-radius:12px;color:var(--fg);font-family:var(--font-sans);font-size:.9375rem;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(232,25,44,.12)}
+.form-input::placeholder{color:var(--muted-fg)}
+.input-wrap{position:relative}
+.input-wrap .form-input{padding-right:44px}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted-fg);padding:4px;display:flex;align-items:center}
+.pw-toggle svg{width:18px;height:18px}
+.form-opts{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;font-size:.875rem}
+.chk-label{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--fg-muted);user-select:none}
+.chk-label input{accent-color:var(--primary);width:16px;height:16px}
+.forgot{color:var(--primary);font-weight:500;cursor:pointer;background:none;border:none;font-size:.875rem;font-family:var(--font-sans)}
+.forgot:hover{text-decoration:underline}
+
+/* SUBMIT BTN */
+.btn-auth{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),#C0141F);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:600;font-family:var(--font-sans);cursor:pointer;transition:all .2s;margin-bottom:1.25rem}
+.btn-auth:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,25,44,.35)}
+.btn-auth:active{transform:scale(.97)}
+.btn-auth:disabled{opacity:.65;cursor:not-allowed;transform:none}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;color:var(--muted-fg);font-size:.8125rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* SOCIAL */
+.social-row{display:flex;gap:10px;margin-bottom:1.5rem}
+.btn-social{flex:1;padding:10px;background:var(--muted);border:1.5px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.875rem;font-weight:500;color:var(--fg);cursor:pointer;transition:all .2s;font-family:var(--font-sans)}
+.btn-social:hover{background:var(--border)}
+.btn-social svg{width:18px;height:18px;flex-shrink:0}
+
+/* FOOTER TEXT */
+.auth-foot{text-align:center;font-size:.875rem;color:var(--fg-muted)}
+.auth-foot a{color:var(--primary);font-weight:600;cursor:pointer;background:none;border:none;font-size:.875rem;font-family:var(--font-sans)}
+.auth-foot a:hover{text-decoration:underline}
+
+/* MESSAGES */
+.msg{padding:10px 14px;border-radius:10px;font-size:.8125rem;font-weight:500;margin-bottom:1rem;display:none}
+.msg.show{display:block}
+.msg-err{background:rgba(232,25,44,.08);border:1px solid rgba(232,25,44,.2);color:var(--primary)}
+.msg-ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#16a34a}
+
+/* PASSWORD STRENGTH */
+.str-bars{display:flex;gap:4px;margin-top:6px}
+.str-seg{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .3s}
+.str-seg.weak{background:var(--primary)}
+.str-seg.medium{background:#F59E0B}
+.str-seg.strong{background:#22C55E}
+.str-lbl{font-size:.75rem;font-weight:500;margin-top:4px;min-height:16px}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;padding:12px 24px;border-radius:14px;font-size:.875rem;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* BACK LINK */
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;color:var(--fg-muted);text-decoration:none;margin-bottom:1.25rem;transition:color .15s}
+.back-link:hover{color:var(--fg)}
+.back-link svg{width:14px;height:14px}
+
+@media(max-width:480px){.auth-card{padding:2rem 1.25rem;border-radius:20px}}
+</style>
+</head>
+<body>
+
+<!-- Theme Toggle -->
+<button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+  <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<div class="auth-card" role="main">
+
+  <!-- Logo -->
+  <a href="index.html" class="logo">
+    <div class="logo-icon">TF</div>
+    <span class="logo-name">TITANFIT</span>
+  </a>
+
+  <h1 class="auth-h1">Welcome Back</h1>
+  <p class="auth-sub">Sign in to continue your fitness journey</p>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="login" role="tab" aria-selected="true">Sign In</button>
+    <button class="tab" data-tab="signup" role="tab" aria-selected="false">Create Account</button>
+  </div>
+
+  <!-- ── LOGIN FORM ── -->
+  <div id="loginForm">
+    <div class="msg msg-err" id="loginErr" role="alert"></div>
+    <div class="msg msg-ok"  id="loginOk"  role="status"></div>
+
+    <div class="form-group">
+      <label class="form-label" for="loginEmail">Email address</label>
+      <input class="form-input" type="email" id="loginEmail" placeholder="alex@example.com" autocomplete="email"/>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="loginPw">Password</label>
+      <div class="input-wrap">
+        <input class="form-input" type="password" id="loginPw" placeholder="Enter your password" autocomplete="current-password"/>
+        <button class="pw-toggle" type="button" data-target="loginPw" aria-label="Toggle password">
+          <svg class="eye-open"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-opts">
+      <label class="chk-label"><input type="checkbox" id="remember"/> Remember me</label>
+      <button class="forgot" id="forgotBtn">Forgot password?</button>
+    </div>
+
+    <button class="btn-auth" id="loginBtn">Sign In</button>
+
+    <div class="divider"><span>or continue with</span></div>
+    <div class="social-row">
+      <button class="btn-social" onclick="showToast('Google login coming soon!')">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Google
+      </button>
+      <button class="btn-social" onclick="showToast('Apple login coming soon!')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Apple
+      </button>
+    </div>
+    <p class="auth-foot">Don't have an account? <a onclick="switchTab('signup')">Create one free</a></p>
+  </div>
+
+  <!-- ── SIGNUP FORM ── -->
+  <div id="signupForm" style="display:none">
+    <div class="msg msg-err" id="signupErr" role="alert"></div>
+    <div class="msg msg-ok"  id="signupOk"  role="status"></div>
+
+    <div class="form-group">
+      <label class="form-label" for="signupName">Full name</label>
+      <input class="form-input" type="text" id="signupName" placeholder="Alex Rivera" autocomplete="name"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="signupEmail">Email address</label>
+      <input class="form-input" type="email" id="signupEmail" placeholder="alex@example.com" autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="signupPw">Password</label>
+      <div class="input-wrap">
+        <input class="form-input" type="password" id="signupPw" placeholder="Min. 8 characters" autocomplete="new-password"/>
+        <button class="pw-toggle" type="button" data-target="signupPw" aria-label="Toggle password">
+          <svg class="eye-open"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div class="str-bars">
+        <div class="str-seg" id="s1"></div><div class="str-seg" id="s2"></div>
+        <div class="str-seg" id="s3"></div><div class="str-seg" id="s4"></div>
+      </div>
+      <div class="str-lbl" id="strLbl"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="signupConfirm">Confirm password</label>
+      <div class="input-wrap">
+        <input class="form-input" type="password" id="signupConfirm" placeholder="Repeat your password" autocomplete="new-password"/>
+        <button class="pw-toggle" type="button" data-target="signupConfirm" aria-label="Toggle confirm password">
+          <svg class="eye-open"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+    <div style="margin-bottom:1.25rem">
+      <label class="chk-label" for="terms">
+        <input type="checkbox" id="terms"/>
+        I agree to the <a href="#" style="color:var(--primary);font-weight:600">Terms</a> &amp; <a href="#" style="color:var(--primary);font-weight:600">Privacy Policy</a>
+      </label>
+    </div>
+    <button class="btn-auth" id="signupBtn">Create Account</button>
+    <div class="divider"><span>or continue with</span></div>
+    <div class="social-row">
+      <button class="btn-social" onclick="showToast('Google login coming soon!')">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Google
+      </button>
+      <button class="btn-social" onclick="showToast('Apple login coming soon!')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Apple
+      </button>
+    </div>
+    <p class="auth-foot">Already have an account? <a onclick="switchTab('login')">Sign in here</a></p>
+  </div>
+
+</div><!-- /auth-card -->
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+// ── THEME ──
+const root=document.documentElement;
+const stored=localStorage.getItem('tf-theme');
+if(stored==='dark'){root.classList.add('dark');document.getElementById('sunIcon').style.display='block';document.getElementById('moonIcon').style.display='none';}
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const dark=root.classList.toggle('dark');
+  localStorage.setItem('tf-theme',dark?'dark':'light');
+  document.getElementById('sunIcon').style.display=dark?'block':'none';
+  document.getElementById('moonIcon').style.display=dark?'none':'block';
+});
+
+// ── TABS ──
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>{
+    const active=t.dataset.tab===tab;
+    t.classList.toggle('active',active);
+    t.setAttribute('aria-selected',active);
+  });
+  document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
+  document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
+  clearMsgs();
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+
+// ── PASSWORD TOGGLE ──
+document.querySelectorAll('.pw-toggle').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const inp=document.getElementById(btn.dataset.target);
+    const isText=inp.type==='text';
+    inp.type=isText?'password':'text';
+    btn.querySelector('.eye-open').style.display=isText?'block':'none';
+    btn.querySelector('.eye-closed').style.display=isText?'none':'block';
+  });
+});
+
+// ── PASSWORD STRENGTH ──
+document.getElementById('signupPw').addEventListener('input',function(){
+  const v=this.value;
+  let score=0;
+  if(v.length>=8)score++;
+  if(/[A-Z]/.test(v))score++;
+  if(/[0-9]/.test(v))score++;
+  if(/[^A-Za-z0-9]/.test(v))score++;
+  const segs=['s1','s2','s3','s4'];
+  const cls=['','weak','medium','strong','strong'];
+  const colors=['','#E8192C','#F59E0B','#22C55E','#22C55E'];
+  const lbls=['','Weak','Fair','Good','Strong'];
+  segs.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.className='str-seg';
+    if(i<score)el.classList.add(cls[score]);
+  });
+  const lbl=document.getElementById('strLbl');
+  lbl.textContent=lbls[score]||'';
+  lbl.style.color=colors[score]||'';
+});
+
+// ── FORGOT PASSWORD ──
+document.getElementById('forgotBtn').addEventListener('click',()=>{
+  showMsg('loginOk','Password reset link sent to your email ✓','ok');
+});
+
+// ── LOGIN ──
+document.getElementById('loginBtn').addEventListener('click',function(){
+  clearMsgs();
+  const email=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('loginPw').value;
+  if(!email||!pw){showMsg('loginErr','Please fill in all fields.');return;}
+  if(!isEmail(email)){showMsg('loginErr','Please enter a valid email address.');return;}
+  this.disabled=true;this.textContent='Signing in…';
+  setTimeout(()=>{
+    this.disabled=false;this.textContent='Sign In';
+    showMsg('loginOk','Welcome back! Redirecting to dashboard…','ok');
+    setTimeout(()=>window.location.href='index.html',1400);
+  },1200);
+});
+
+// ── SIGNUP ──
+document.getElementById('signupBtn').addEventListener('click',function(){
+  clearMsgs();
+  const name=document.getElementById('signupName').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const pw=document.getElementById('signupPw').value;
+  const confirm=document.getElementById('signupConfirm').value;
+  const terms=document.getElementById('terms').checked;
+  if(!name||!email||!pw||!confirm){showMsg('signupErr','Please fill in all fields.');return;}
+  if(!isEmail(email)){showMsg('signupErr','Please enter a valid email address.');return;}
+  if(pw.length<8){showMsg('signupErr','Password must be at least 8 characters.');return;}
+  if(pw!==confirm){showMsg('signupErr','Passwords do not match.');return;}
+  if(!terms){showMsg('signupErr','Please accept the terms and conditions.');return;}
+  this.disabled=true;this.textContent='Creating account…';
+  setTimeout(()=>{
+    this.disabled=false;this.textContent='Create Account';
+    showMsg('signupOk','Account created! Welcome to TitanFit 🎉','ok');
+    setTimeout(()=>window.location.href='index.html',1800);
+  },1400);
+});
+
+// ── UTILS ──
+function isEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
+function showMsg(id,msg,type='err'){
+  const el=document.getElementById(id);
+  el.textContent=msg;
+  el.className='msg show msg-'+(type==='ok'?'ok':'err');
+}
+function clearMsgs(){
+  document.querySelectorAll('.msg').forEach(el=>{el.classList.remove('show');});
+}
+let _tt;
+function showToast(msg){
+  const el=document.getElementById('toastEl');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// Enter key on inputs
+document.querySelectorAll('.form-input').forEach(inp=>{
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const loginVisible=document.getElementById('loginForm').style.display!=='none';
+      if(loginVisible)document.getElementById('loginBtn').click();
+      else document.getElementById('signupBtn').click();
+    }
+  });
+});
+</script>
+</body>
+</html>
